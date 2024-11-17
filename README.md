@@ -1,5 +1,3 @@
-# car-catalog-uni
-
 ## Project setup
 ```
 npm install
