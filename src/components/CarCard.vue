@@ -1,8 +1,13 @@
 <template>
-  <div class="car-card" @click="viewDetails">
-    <img :src="car.image" :alt="car.model" class="car-image" />
-    <h2>{{ car.brand }} {{ car.model }}</h2>
-    <p>Price: ${{ car.price }}</p>
+  <div
+    class="car-card"
+    @click="viewDetails"
+    :style="{ backgroundImage: `url(${backgroundImage})` }"
+  >
+    <div class="car-info">
+      <h2 class="car-title">{{ car.brand }} {{ car.model }}</h2>
+      <p class="car-price">Price: ${{ car.price }}</p>
+    </div>
   </div>
 </template>
 

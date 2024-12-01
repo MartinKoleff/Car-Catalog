@@ -1,5 +1,6 @@
 <template>
   <div class="car-list-container">
+
     <!-- Search Bar -->
     <div class="search-bar">
       <input
@@ -9,7 +10,6 @@
       />
     </div>
 
-    <!-- Car Cards -->
     <div class="car-list">
       <CarCard
         v-for="car in filteredCars"
@@ -22,8 +22,7 @@
 </template>
 
 <script>
-
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import CarCard from './CarCard.vue';
 
 export default {
@@ -32,25 +31,50 @@ export default {
     CarCard,
   },
   setup() {
-    const cars = ref([]);
+    const cars = ref([]); // Reactive array for cars
+    const searchQuery = ref(''); // Reactive search query
 
-    //Fetch car data from the API
+    // Fetch car data from the API
     const fetchCars = async () => {
       try {
         const response = await fetch('https://myfakeapi.com/api/cars');
         const data = await response.json();
-        cars.value = data.cars; 
+        console.log('API response: ', data);
+
+        // cars.value = data.cars;
+        cars.value = data.cars.map((car) => ({
+          brand: car.car,
+          id: car.id,
+          model: car.car_model,
+          color: car.car_color,
+          year: car.car_model_year,
+          vin: car.car_vin,
+          price: car.price,
+          availability: car.availability,
+        }));
+
+        console.log('Parsed cars:', cars.value);
       } catch (error) {
         console.error('Error fetching car data:', error);
       }
     };
 
     onMounted(() => {
-      fetchCars(); 
+      fetchCars(); // Fetch cars on component mount
+    });
+
+    // Computed property for filtered cars
+    const filteredCars = computed(() => {
+      return cars.value.filter((car) => {
+        const carName = `${car.brand} ${car.model}`.toLowerCase();
+        return carName.includes(searchQuery.value.toLowerCase());
+      });
     });
 
     return {
       cars,
+      searchQuery,
+      filteredCars,
     };
   },
   data() {
@@ -85,17 +109,8 @@ export default {
       //     image: 'https://via.placeholder.com/300x200.png?text=BMW+3+Series',
       //   },
       // ],
-      searchQuery: '', // User's search query
+      // searchQuery: '', // User's search query
     };
-  },
-  computed: {
-    //Filter cars based on the search query
-    filteredCars() {
-      return this.cars.filter((car) => {
-        const carName = `${car.brand} ${car.model}`.toLowerCase(); //Combine brand and model
-        return carName.includes(this.searchQuery.toLowerCase());
-      });
-    },
   },
 };
 </script>
