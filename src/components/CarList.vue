@@ -35,13 +35,12 @@ export default {
     const searchQuery = ref('');
     const desiredBrands = [
       'BMW',
-      'Mercedes',
+      'Mercedes-Benz',
       'Audi',
       'Volvo',
       'Chevrolet',
       'Ford',
       'Dodge',
-      'Aston Martin',
       'Maserati'
     ];
 
