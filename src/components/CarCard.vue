@@ -2,24 +2,31 @@
   <div class="car-card" @click="viewDetails">
     <img :src="car.image" :alt="car.model" class="car-image" />
     <h2>{{ car.brand }} {{ car.model }}</h2>
-    <p>Manufacturer: {{ car.manufacturer }}</p>
-    <p>Specifications: {{ car.specs }}</p>
     <p>Price: ${{ car.price }}</p>
   </div>
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
+
 export default {
+  name: 'CarCard',
   props: {
     car: {
       type: Object,
       required: true,
     },
   },
-  methods: {
-    viewDetails() {
-      this.$router.push(`/car/${this.car.id}`); // Navigate to the Car Details page with the car ID
-    },
+  setup(props) {
+    const router = useRouter(); 
+
+    const viewDetails = () => {
+      router.push(`/car/${props.car.id}`); 
+    };
+
+    return {
+      viewDetails,
+    };
   },
 };
 </script>
