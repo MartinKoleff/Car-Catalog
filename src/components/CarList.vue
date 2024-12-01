@@ -31,17 +31,28 @@ export default {
     CarCard,
   },
   setup() {
-    const cars = ref([]); // Reactive array for cars
-    const searchQuery = ref(''); // Reactive search query
+    const cars = ref([]); 
+    const searchQuery = ref('');
+    const desiredBrands = [
+      'BMW',
+      'Mercedes',
+      'Audi',
+      'Volvo',
+      'Chevrolet',
+      'Ford',
+      'Dodge',
+      'Aston Martin',
+      'Maserati'
+    ];
 
-    // Fetch car data from the API
+    //Fetch car data from the API
     const fetchCars = async () => {
       try {
         const response = await fetch('https://myfakeapi.com/api/cars');
         const data = await response.json();
         console.log('API response: ', data);
 
-        // cars.value = data.cars;
+        //cars.value = data.cars;
         cars.value = data.cars.map((car) => ({
           brand: car.car,
           id: car.id,
@@ -51,7 +62,8 @@ export default {
           vin: car.car_vin,
           price: car.price,
           availability: car.availability,
-        }));
+        }))  
+        .filter((car) => desiredBrands.includes(car.brand));
 
         console.log('Parsed cars:', cars.value);
       } catch (error) {
@@ -60,10 +72,9 @@ export default {
     };
 
     onMounted(() => {
-      fetchCars(); // Fetch cars on component mount
+      fetchCars();
     });
 
-    // Computed property for filtered cars
     const filteredCars = computed(() => {
       return cars.value.filter((car) => {
         const carName = `${car.brand} ${car.model}`.toLowerCase();
