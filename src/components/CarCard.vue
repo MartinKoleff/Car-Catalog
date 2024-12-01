@@ -6,7 +6,7 @@
   >
     <div class="car-info">
       <h2 class="car-title">{{ car.brand }} {{ car.model }}</h2>
-      <p class="car-price">Price: ${{ car.price }}</p>
+      <p class="car-price">Price: {{ car.price }}</p>
     </div>
   </div>
 </template>
