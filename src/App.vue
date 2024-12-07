@@ -5,6 +5,7 @@
         <router-link to="/" class="nav-link">Home</router-link>
         <router-link to="/about" class="nav-link">About Website</router-link>
         <router-link to="/contact" class="nav-link">Contact Us</router-link>
+        <router-link to="/favorites" class="nav-link">Favorite Cars</router-link>
       </nav>
     </header>
     <main>
