@@ -12,60 +12,50 @@
     </div>
   </template>
   
-  <script>
-  import { computed, onMounted, ref } from 'vue';
-  import { useFavoriteStore } from '@/stores/favoriteStore';
-  import CarCard from '@/components/CarCard.vue'; 
-  
-  export default {
-    name: 'FavoriteCars',
-    components: {
-      CarCard,
-    },
-    setup() {
-      const favoriteStore = useFavoriteStore();
-      const allCars = ref([]); 
-      const loading = ref(true);
-  
-      // Fetch all car data
-      const fetchCars = async () => {
-        try {
-          loading.value = true;
-          const response = await fetch('https://myfakeapi.com/api/cars');
-          const data = await response.json();
-  
-          allCars.value = data.cars.map((car) => ({
-            brand: car.car,
-            id: car.id,
-            model: car.car_model,
-            color: car.car_color,
-            year: car.car_model_year,
-            vin: car.car_vin,
-            price: car.price,
-            availability: car.availability,
-          }));
-        } catch (error) {
-          console.error('Error fetching car data:', error);
-        } finally {
-          loading.value = false;
-        }
-      };
-  
-      const favoriteCars = computed(() => {
-        return favoriteStore.getFavoriteCars(allCars.value);
-      });
-  
-      onMounted(async () => {
-        await fetchCars();
-      });
-  
-      return {
-        favoriteCars,
-        loading,
-      };
-    },
-  };
-  </script>
+<script>
+import { computed, onMounted, ref } from 'vue';
+import { useFavoriteStore } from '@/stores/favoriteStore';
+import CarCard from '@/components/CarCard.vue';
+
+export default {
+  name: 'FavoriteCars',
+  components: {
+    CarCard,
+  },
+  setup() {
+    const favoriteStore = useFavoriteStore();
+    const allCars = ref([]);
+    const loading = ref(true);
+
+    //Fetch all cars from the server
+    const fetchCars = async () => {
+      try {
+        loading.value = true;
+        const response = await fetch('http://localhost:3000/api/cars');
+        const data = await response.json();
+        allCars.value = data;
+      } catch (error) {
+        console.error('Error fetching car data:', error);
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    const favoriteCars = computed(() => {
+      return favoriteStore.getFavoriteCars(allCars.value);
+    });
+
+    onMounted(async () => {
+      await fetchCars();
+    });
+
+    return {
+      favoriteCars,
+      loading,
+    };
+  },
+};
+</script>
   
   <style scoped>
   .favorite-cars {

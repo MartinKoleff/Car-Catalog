@@ -44,27 +44,30 @@ export default {
       'Maserati'
     ];
 
-    //Fetch car data from the API
-    const fetchCars = async () => {
+     // Fetch cars from the server
+     const fetchCars = async () => {
       try {
-        const response = await fetch('https://myfakeapi.com/api/cars');
+        const response = await fetch('http://localhost:3000/api/cars');
         const data = await response.json();
+        cars.value = data.filter((car) => desiredBrands.includes(car.brand));
+
         console.log('API response: ', data);
 
-        //cars.value = data.cars;
-        cars.value = data.cars.map((car) => ({
-          brand: car.car,
-          id: car.id,
-          model: car.car_model,
-          color: car.car_color,
-          year: car.car_model_year,
-          vin: car.car_vin,
-          price: car.price,
-          availability: car.availability,
-        }))  
-        .filter((car) => desiredBrands.includes(car.brand));
+//cars.value = data.cars;
+cars.value = data.cars.map((car) => ({
+  brand: car.car,
+  id: car.id,
+  model: car.car_model,
+  color: car.car_color,
+  year: car.car_model_year,
+  vin: car.car_vin,
+  price: car.price,
+  availability: car.availability,
+}))  
+.filter((car) => desiredBrands.includes(car.brand));
 
-        console.log('Parsed cars:', cars.value);
+console.log('Parsed cars:', cars.value);
+
       } catch (error) {
         console.error('Error fetching car data:', error);
       }

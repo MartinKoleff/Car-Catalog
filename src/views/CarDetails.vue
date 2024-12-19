@@ -29,32 +29,21 @@ import { useFavoriteStore } from '../stores/favoriteStore';
 export default {
   name: 'CarDetails',
   setup() {
-    const route = useRoute(); 
-    const router = useRouter(); 
-    const car = ref(null); 
-    const loading = ref(true); 
+    const route = useRoute();
+    const router = useRouter();
+    const car = ref(null);
+    const loading = ref(true);
     const favoriteStore = useFavoriteStore();
 
-    //Fetch car details by ID from the API
+    //Fetch car details from the server
     const fetchCarDetails = async () => {
       try {
         loading.value = true;
-        const response = await fetch(`https://myfakeapi.com/api/cars/${route.params.id}`);
-        const data = await response.json();
-        console.log('API response', data);
 
-        car.value = {
-            id: data.Car.id,
-            brand: data.Car.car, 
-            model: data.Car.car_model, 
-            color: data.Car.car_color, 
-            year: data.Car.car_model_year, 
-            vin: data.Car.car_vin, 
-            price: data.Car.price, 
-            availability: data.Car.availability, 
-        };
-        // car.value = {...data.Car};
-        console.log('Updated car:', car.value); 
+        const response = await fetch(`http://localhost:3000/api/car/${route.params.id}`);
+        const data = await response.json();
+
+        car.value = data; 
       } catch (error) {
         console.error('Error fetching car details:', error);
       } finally {
@@ -62,7 +51,7 @@ export default {
       }
     };
 
-    //Favorite
+    //Check if the car is a favorite
     const isFavorite = computed(() => {
       return car.value ? favoriteStore.isFavorite(car.value.id) : false;
     });
